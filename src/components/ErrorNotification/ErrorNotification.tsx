@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import cn from 'classnames';
 import { ErrorType } from '../../types/ErrorType';
 
@@ -10,20 +10,13 @@ type Props = {
 export const ErrorNotification: React.FC<Props> = props => {
   const { error, setError } = props;
 
-  const [isHidden, setIsHidden] = useState(true);
-
   useEffect(() => {
     if (error === ErrorType.Empty) {
-      setIsHidden(true);
-
       return;
     }
 
-    setIsHidden(false);
-
     const timerId = setTimeout(() => {
       setError(ErrorType.Empty);
-      setIsHidden(true);
     }, 3000);
 
     return () => {
@@ -32,7 +25,6 @@ export const ErrorNotification: React.FC<Props> = props => {
   }, [error, setError]);
 
   const handleClose = () => {
-    setIsHidden(true);
     setError(ErrorType.Empty);
   };
 
@@ -44,7 +36,7 @@ export const ErrorNotification: React.FC<Props> = props => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: isHidden },
+        { hidden: error === ErrorType.Empty },
       )}
     >
       <button

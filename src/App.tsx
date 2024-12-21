@@ -28,20 +28,17 @@ export const App: React.FC = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filteredTodos = useMemo(
-    () =>
-      todos.filter(todo => {
-        if (filterStatus === FilterStatus.All) {
-          return true;
-        }
+  const filteredTodos = useMemo(() => {
+    if (filterStatus === FilterStatus.All) {
+      return todos;
+    }
 
-        return filterStatus === FilterStatus.Completed
-          ? todo.completed
-          : !todo.completed;
-      }),
-
-    [todos, filterStatus],
-  );
+    return todos.filter(todo =>
+      filterStatus === FilterStatus.Completed
+        ? todo.completed
+        : !todo.completed,
+    );
+  }, [todos, filterStatus]);
 
   const activeTodosCount = useMemo(
     () => todos.filter(todo => !todo.completed).length,
